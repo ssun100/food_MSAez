@@ -1,0 +1,74 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: 결제
+          uri: http://localhost:8081
+          predicates:
+            - Path=/결제/**, 
+        - id: 주문
+          uri: http://localhost:8082
+          predicates:
+            - Path=/cooks/**, 
+        - id: 배달
+          uri: http://localhost:8083
+          predicates:
+            - Path=/배달/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: 결제
+          uri: http://결제:8080
+          predicates:
+            - Path=/결제/**, 
+        - id: 주문
+          uri: http://주문:8080
+          predicates:
+            - Path=/cooks/**, 
+        - id: 배달
+          uri: http://배달:8080
+          predicates:
+            - Path=/배달/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
